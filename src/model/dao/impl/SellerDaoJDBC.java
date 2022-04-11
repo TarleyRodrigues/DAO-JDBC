@@ -51,17 +51,9 @@ public class SellerDaoJDBC implements SellerDao {
 			rs = st.executeQuery(); //executa o st
 			
 			if(rs.next()) {
-				Department dep = new Department();
-				dep.setId(rs.getInt("DepartmentId")); //DeparmentId como está no BD criado
-				dep.setName(rs.getString("DepName")); //DepName = no BD criado	
+				Department dep = instantiateDepartment(rs);	
 				
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				obj.setDepartment(dep);
+				Seller obj = instantiateSeller(rs, dep);
 				
 				return obj;
 			}
@@ -76,6 +68,24 @@ public class SellerDaoJDBC implements SellerDao {
 		}
 		
 		
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		obj.setDepartment(dep);
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) throws SQLException {
+		Department dep = new Department();
+		dep.setId(rs.getInt("DepartmentId")); //DeparmentId como está no BD criado
+		dep.setName(rs.getString("DepName")); //DepName = no BD criado
+		return dep;
 	}
 
 	@Override
